@@ -7,6 +7,8 @@
 
 # 1º - ou centralizar: X.np.mean(k,) ou usar o standardScaler
 
+from numpy.testing._private.utils import measure
+from src.si.util.util import euclidean, manhattan
 from src.si. data import Dataset
 import pandas as np
 
@@ -16,16 +18,19 @@ class KMeans:
         self.k = k
         self.n = max_iterations
         self.centroides = None
+        self.measure = measure
+        self._min = 0
+        self._max = 0
 
-    def distance_12(self, x, y):
+  #  def distance_12(self, x, y):
         """
         Distancia euclidian distance
         :param x:
         :param y:
         :return:
         """
-        dist = np.absolute((x - y) ** 2).sum(axis=1)
-        return dist
+   #     dist = np.absolute((x - y) ** 2).sum(axis=1)
+   #     return dist
 
     def fit(self, dataset):
         self._min = np.min(dataset.X)
@@ -37,8 +42,12 @@ class KMeans:
                                     for i in range(x.shape[1])])
 
     def get_closest_centroid(self, x):
-        dist = self.distance_12(x, self.centroides)
-        closest_centroid_index = np.argmin(dist, axis=0)
+        if self.measure is "euclidean":
+            dist = euclidean(x, self.centroides)
+            closest_centroid_index = np.argmin(dist, axis=0)
+        else:
+            dist = manhattan(x, self.centroides)
+            closest_centroid_index = np.argmin(dist, axis=0)
         return closest_centroid_index
 
     def transform(self, dataset):
@@ -50,11 +59,15 @@ class KMeans:
         while changed is True or count < self.n:
             idxs = np.apply_along_axis(self.get_closest_centroid(x), axis=0, arr=True)
             cent = [np.mean(x[idxs == 1]) for i in range(x.shape[0])]
+            self.centroides = np.array(cent)
+
             old_idxs = idxs
             count += 1
-        return old_idxs
+        return self.centroides, old_idxs
 
     def fit_transform(self, dataset):
-        pass
+        self.fit(dataset)
+        centroides, indices = self.transform(dataset)
+        return centroides, indices
 
 

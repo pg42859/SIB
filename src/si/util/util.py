@@ -55,3 +55,12 @@ def summary(dataset, format='df'):
         return df
     else:
         return stats
+
+def euclidean(x, y):
+    dist = np.sqrt(np.sum((x-y)**2, axis=1))
+    return dist
+
+def manhattan(x, y):
+    dist = np.abs(x-y)
+    dist2 = np.sum(dist)
+    return dist

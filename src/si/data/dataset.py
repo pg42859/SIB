@@ -1,5 +1,5 @@
 import numpy as np
-from si.util.util import label_gen
+from src.si.util.util import label_gen
 
 __all__ = ['Dataset']
 
@@ -133,6 +133,6 @@ def summary(dataset, format='df'):
         return stats
 
 
-dataseteste = Dataset.from_data("C:/Users/Ze/Desktop/Mestrado/3ºSemestre/si/datasets/breast-bin.data")
+dataseteste = Dataset.from_data("C:/Users/andre/OneDrive/Ambiente de Trabalho/SIB/datasets/breast-bin.data")
 print(dataseteste.Y)
 print(dataseteste.X)
