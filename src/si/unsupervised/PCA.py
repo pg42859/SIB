@@ -1,28 +1,34 @@
 import numpy as np
 from src.si.util.scale import StandardScaler
+import pandas as pd
 
 class PCA:
-    def __init__(self, num_components=2):
-        self.nuncomps = num_components
+    def __init__(self, num_components=2, using="svd"):
+        self.numcomps = num_components
+        self.alg = using
 
-    
-    def transform(self,dataset):
-        x_scaled = StandardScaler.fit_transform(dataset) #standardizar os dados
-        matriz_cov = np.cov(x_scaled, rowvar=False)
-        self.eigen_values, self.eigen_vectors = np.linalg.eigh(matriz_cov)
-        #sort the eigenvalues in descending order
-        self.sorted_index = np.argsort(self.eigen_values)[::-1] #dá return a um array de indices do mesmo shape
-        self.sorted_eigenvalue = self.eigen_values[self.sorted_index]
-        sorted_eigenvectors = self.eigen_vectors[:, 0:self.numcomps]
-        eigenvector_subset = sorted_eigenvectors[:, 0:self.nuncomps]
-        x_reduced = np.dot(eigenvector_subset.transpose(), x_scaled.transpose()).transpose()
-        return np.sum(self.sorted_eigenvalue_sub), self.sorted_eigenvalue_sub
-    
-    def explained_variance(self, dataset):
-        self.sorted_eigenvalue_sub = self.sorted_eigenvalue[0:self.numcomps]
-        return np.sum(self.sorted_eigenvalue), self.sorted_eigenvalue_sub
-    
+    def transform(self, dataset):  # objeto Dataset
+        scaler = StandardScaler()
+        x_scaled = scaler.fit_transform(dataset)  
+        X = x_scaled.X
+        XT = X.transpose()
+        print(XT)
+        self.eigen_vectors, self.eigen_values, vt = np.linalg.svd(XT)
+        self.sorted_index = np.argsort(self.eigen_values)[::-1]  
+        self.sorted_eigenvalue = self.eigen_values[self.sorted_index] 
+        sorted_eigenvectors = self.eigen_vectors[:, self.sorted_index]
+        eigenvector_subset = sorted_eigenvectors[:, 0:self.numcomps] 
+        x_reduced = np.dot(eigenvector_subset.transpose(), XT).transpose()
+        return x_reduced
+
+    def variance_explained(self):
+        somapercent = np.sum(self.sorted_eigenvalue)
+        percentagem = []
+        for i in self.sorted_eigenvalue:
+            percentagem.append(i/somapercent *100)
+        return np.array(percentagem)
+
     def fit_transform(self, dataset):
         data_reduced = self.transform(dataset)
-        explain, eigvalues = self.explained_variance(dataset)
-        return data_reduced, explain, eigvalues
+        percentagem = self.variance_explained()
+        return data_reduced, percentagem

@@ -4,6 +4,9 @@ from ..data import Dataset
 
 
 class StandardScaler:
+    def __init__(self):
+        self.mean = None
+        self.var = None
     """
     Standardize features by centering the mean to 0 and unit variance.
     The standard score of an instance is calculated by:
@@ -28,8 +31,8 @@ class StandardScaler:
         ----------
         dataset : A Dataset OBJECT to be standardized
         """
-        self.mean = np.mean(dataset.X, axis=1)
-        self.var = np.var(dataset.X, axis=1)
+        self.mean = np.mean(dataset.X, axis=1) #média em cada linha
+        self.var = np.var(dataset.X, axis=1) #var em cada linha
 
     def transform(self, dataset, inline=False):
         """
@@ -84,4 +87,5 @@ class StandardScaler:
             dataset.X = volta
             return dataset
         else:
+            from src.si.data import Dataset
             return Dataset(volta, copy(dataset.Y), copy(dataset.xnames), copy(dataset.ynames))

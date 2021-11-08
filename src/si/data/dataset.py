@@ -1,7 +1,7 @@
 import numpy as np
 from src.si.util.util import label_gen
 
-__all__ = ['Dataset']
+__all__ = ['Dataset', 'summary']
 
 
 class Dataset:
@@ -26,13 +26,13 @@ class Dataset:
         :return: A DataSet object
         :rtype: DataSet
         """
-        data = np.genfromtxt(filename, delimiter=sep)
-        if labeled:
-            X = data[:, 0:-1]
-            Y = data[:, -1]
-        else:
+        data = np.genfromtxt(filename, delimiter=sep) #dá return a uma matriz numpy
+        if labeled: #se houver labels
+            X = data[:, 0:-1] #é tudo extraido menos uma coluna
+            Y = data[:, -1] #ultima coluna são os labels
+        else: #se não tiver
             X = data
-            Y = None
+            Y = None #não temos labels
         return cls(X, Y)
 
     @classmethod
@@ -132,7 +132,3 @@ def summary(dataset, format='df'):
     else:
         return stats
 
-
-dataseteste = Dataset.from_data("C:/Users/andre/OneDrive/Ambiente de Trabalho/SIB/datasets/breast-bin.data")
-print(dataseteste.Y)
-print(dataseteste.X)
