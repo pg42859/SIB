@@ -46,17 +46,18 @@ class Dataset:
         :return: DataSet in array form
         :rtype: array
         """
-        if ylabel is not None and ylabel in df.columns:
-            X = df.loc[:, df.columns != ylabel].to_array()
-            Y = df.loc[:, ylabel].to_array()
-            xnames = df.columns.tolist().remove(ylabel)
-            ynames = ylabel
+        if ylabel and ylabel in df.columns:
+            X = df.loc[:, df.columns != ylabel].to_numpy()
+            y = df.loc[:, ylabel].to_numpy()
+            xnames = list(df.columns)
+            xnames.remove(ylabel)
+            yname = ylabel
         else:
             X = df.to_numpy()
-            Y = None
-            xnames = df.columns.tolist()
-            ynames = None
-        return cls(X, Y, xnames, ynames)
+            y = None
+            xnames = list(df.columns)
+            yname = None
+        return cls(X, y, xnames, yname)
 
 
     def __len__(self):
@@ -96,6 +97,9 @@ class Dataset:
             dataset = pd.DataFrame(np.hstack((self.X, self.Y.reshape(len(self.Y), 1))), columns=np.hstack((self._xnames, self._yname)))
         return dataset
 
+    def getXy(self):
+        return self.X, self.Y
+
 
 def summary(dataset, format='df'):
     """ Returns the statistics of a dataset(mean, std, max, min)
@@ -105,7 +109,7 @@ def summary(dataset, format='df'):
     :type format: str, optional
     """
     if dataset.hasLabel():
-        fullds = np.hstack((dataset.X, dataset.y.reshape(len(dataset.y), 1)))
+        fullds = np.hstack((dataset.X, dataset.Y.reshape(len(dataset.Y), 1)))
         columns = dataset._xnames[:] + [dataset._yname]
     else:
         fullds = dataset.X

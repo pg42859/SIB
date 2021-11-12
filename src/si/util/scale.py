@@ -1,6 +1,6 @@
 import numpy as np
 from copy import copy
-from ..data import Dataset
+from src.si.data import Dataset
 
 
 class StandardScaler:
@@ -31,8 +31,8 @@ class StandardScaler:
         ----------
         dataset : A Dataset OBJECT to be standardized
         """
-        self.mean = np.mean(dataset.X, axis=1) #média em cada linha
-        self.var = np.var(dataset.X, axis=1) #var em cada linha
+        self.mean = np.mean(dataset.X, axis=0) #média em cada coluna
+        self.var = np.var(dataset.X, axis=0) #var em cada coluna
 
     def transform(self, dataset, inline=False):
         """
@@ -52,7 +52,7 @@ class StandardScaler:
             dataset.X = Z
             return dataset
         else:
-            return Dataset(Z, copy(dataset.Y), copy(dataset.xnames), copy(dataset.ynames))
+            return Dataset(Z, copy(dataset.Y), copy(dataset._xnames), copy(dataset._yname))
 
     def fit_transform(self, dataset, inline=False):
         """
@@ -88,4 +88,4 @@ class StandardScaler:
             return dataset
         else:
             from src.si.data import Dataset
-            return Dataset(volta, copy(dataset.Y), copy(dataset.xnames), copy(dataset.ynames))
+            return Dataset(volta, copy(dataset.Y), copy(dataset._xnames), copy(dataset._yname))
