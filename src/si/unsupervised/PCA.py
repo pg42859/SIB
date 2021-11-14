@@ -9,19 +9,19 @@ class PCA:
 
     def transform(self, dataset):  # objeto Dataset
         scaler = StandardScaler()
-        x_scaled = scaler.fit_transform(dataset)  
+        x_scaled = scaler.fit_transform(dataset)  # standardizar os dados usando o StandardScaler
         X = x_scaled.X
         XT = X.transpose()
         print(XT)
-        self.eigen_vectors, self.eigen_values, vt = np.linalg.svd(XT)
-        self.sorted_index = np.argsort(self.eigen_values)[::-1]  
-        self.sorted_eigenvalue = self.eigen_values[self.sorted_index] 
-        sorted_eigenvectors = self.eigen_vectors[:, self.sorted_index]
-        eigenvector_subset = sorted_eigenvectors[:, 0:self.numcomps] 
-        x_reduced = np.dot(eigenvector_subset.transpose(), XT).transpose()
+        self.eigen_vectors, self.eigen_values, vt = np.linalg.svd(XT)  # matriz U, s e V transposta
+        self.sorted_index = np.argsort(self.eigen_values)[::-1]  # Devolve os indices por ordem decrescente de acordo com a importância dos valores
+        self.sorted_eigenvalue = self.eigen_values[self.sorted_index]  # Ordena os valores tendo em conta os indices anteriores
+        sorted_eigenvectors = self.eigen_vectors[:, self.sorted_index]  # devolve apenas as colunas com os indices dos valores
+        eigenvector_subset = sorted_eigenvectors[:, 0:self.numcomps]  # apenas devolve o numero de colunas que queremos
+        x_reduced = np.dot(eigenvector_subset.transpose(), XT).transpose()  # produto escalar
         return x_reduced
 
-    def variance_explained(self):
+    def variance_explained(self):  # retorna um array com as varianças em percentagem
         somapercent = np.sum(self.sorted_eigenvalue)
         percentagem = []
         for i in self.sorted_eigenvalue:
