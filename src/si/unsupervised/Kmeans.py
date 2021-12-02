@@ -24,7 +24,7 @@ class KMeans:
 
     def get_closest_centroid(self, x):  # dá return do index do centroide mais próximo
         dist = self.measure(x, self.centroides)  # calcula a distancia
-        closest_centroid_index = np.argmin(dist, axis=0)  # argmin - recebe um array e o axis pretendido, dá return dos indices de menor valor ao longo desse axis (linha neste caso)
+        closest_centroid_index = np.argmin(dist, axis=0)  # argmin - recebe um array e o axis pretendido, dá return dos indices de menor valor ao longo desse axis (coluna neste caso)
         return closest_centroid_index
 
     def transform(self, dataset):
@@ -33,7 +33,7 @@ class KMeans:
         changed = False
         count = 0
         old_idxs = np.zeros(x.shape[0])  # array de zeros
-        while count < self.n and not changed:  # enquanto o nº max de its não for atingido e not changed == True
+        while count < self.n and not changed:  # enquanto o nº max de its não for atingido e changed = False
             idxs = np.apply_along_axis(self.get_closest_centroid, axis=0, arr=x.T)  # aplica ao longo do axis escolhido ao array x.T a função get_closest_centroid
             self.centroids = np.array([np.mean(x[idxs == i], axis=0) for i in range(self.k)])  # calcular a media sobre os pontos e essas medias são os novos pontos
             changed = np.all(old_idxs == idxs)  # testar se são os mesmo indexes que os antigos

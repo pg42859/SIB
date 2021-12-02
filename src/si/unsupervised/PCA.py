@@ -21,7 +21,7 @@ class PCA:
         x_reduced = np.dot(eigenvector_subset.transpose(), XT).transpose()  # produto escalar
         return x_reduced
 
-    def variance_explained(self):  # retorna um array com as varianças em percentagem
+    def variance_explained(self):  # retorna um array com as variancias em percentagem
         somapercent = np.sum(self.sorted_eigenvalue)
         percentagem = []
         for i in self.sorted_eigenvalue:

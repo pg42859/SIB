@@ -13,8 +13,7 @@ class KNN(Model):
         self.dataset = dataset
         self.is_fited = True
 
-    def get_neighbors(self, x):  # calcula as distancias entre cada ponto de teste em relação a todos os pontos do dataset
-        # de treino
+    def get_neighbors(self, x):  # calcula as distancias entre cada ponto de teste em relação a todos os pontos do dataset de treino
         dist = euclidean(x, self.dataset.X)  # distancia euclideana
         indx_sort = np.argsort(dist)  # dá sort aos indexes tendo em consideração a distancia
         return indx_sort[:self.k]  #  retorna os indexes dos melhores pontos
@@ -27,7 +26,7 @@ class KNN(Model):
         neighbors = self.get_neighbors(x)  # vizinhos mais proximos dos pontos do dataset de teste
         values = self.dataset.Y[neighbors].tolist()  # lista de valores
         if self.classification:
-            prediction = max(set(values), key=values.count)
+            prediction = max(set(values), key=values.count)  # devolve a classe com mais incidencia
         else:
             prediction = sum(values) / len(values)
         return prediction
