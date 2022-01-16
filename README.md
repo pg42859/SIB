@@ -1,4 +1,4 @@
-![CI-CD](https://github.com/vmspereira/si/actions/workflows/main.yaml/badge.svg)
+![CI-CD](https://github.com/pg42859/SIB/actions/workflows/main.yaml/badge.svg)
 
 # Sistemas Inteligentes
 
@@ -6,7 +6,7 @@
 
 
 
-`git clone https://github.com/vmspereira/si.git`
+`git clone https://github.com/pg42859/SIB.git`
 
 `cd si`
 
