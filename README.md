@@ -1,4 +1,4 @@
-![CI-CD](https://github.com/pg42859/SIB/actions/workflows/main.yaml/badge.svg)
+![CI-CD](https://github.com/pg428/SIB/actions/workflows/main.yaml/badge.svg)
 
 # Sistemas Inteligentes
 
@@ -20,6 +20,6 @@ The *tests* folder are python tests for continuous integration.
 
 The *dataset* folder contains some illustrative datasets.
 
-The *script* folder contains some scripts to test yout code:
+The *script* folder contains some scripts to test your code:
 
 `python scripts/dataset.py`
