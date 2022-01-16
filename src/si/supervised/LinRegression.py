@@ -43,7 +43,7 @@ class LinearRegression(Model):
 
     def cost(self):
         y_pred = np.dot(self.X, self.theta)
-        return mse(y_pred, self.Y)
+        return mse(self.Y, y_pred)/2
 
 
 class LinearRegressionReg(LinearRegression):
