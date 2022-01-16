@@ -88,8 +88,8 @@ class NN(Model):
             self.history[epoch] = err
             if self.verbose:
                 print(f"epoch {epoch+1}/{self.epochs} error={err}")
-        if not self.verbose:
-            print(f"error={err}")
+            else:
+                print("\r", f"epoch {epoch + 1}/{self.epochs} error = {err}")
         self.is_fited = True
 
     def predict(self,input_data):
