@@ -77,7 +77,8 @@ class StandardScaler:
         where s is the standard deviation, and u is the mean.
         Parameters
         ----------
-        dataset : A standardized Dataset object
+        :param dataset : A standardized Dataset object
+        :param inline:
         Returns
         -------
         Dataset object

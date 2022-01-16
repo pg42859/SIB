@@ -7,7 +7,7 @@ class Model(ABC):
         Abstract class defining an interface
         for supervised learning models.
         """
-        self.is_fitted = False
+        self.is_fited = False
 
     @abstractmethod
     def fit(self, dataset):

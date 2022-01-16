@@ -153,13 +153,13 @@ class DecisionTree(Model):
         self.Tree.depth = 1
         self.Tree.probas = self.nodeProbas(y)
         self.buildDT(X, y, self.Tree)
-        self.is_fitted = True
+        self.is_fited = True
 
     def predictSample(self, x, node):
         '''
         Passes one object through decision tree and return the probability of it to belong to each class
         '''
-        assert self.is_fitted, 'Model must be fit before predicting'
+        assert self.is_fited, 'Model must be fit before predicting'
         # if we have reached the terminal node of the tree
         if node.is_terminal:
             return node.probas
@@ -171,13 +171,13 @@ class DecisionTree(Model):
         return probas
 
     def predict(self, x):
-        assert self.is_fitted, 'Model must be fit before predicting'
+        assert self.is_fited, 'Model must be fit before predicting'
         pred = np.argmax(self.predictSample(x, self.Tree))
         return pred
 
     def cost(self, X=None, y=None):
         X = X if X is not None else self.dataset.X
-        y = y if y is not None else self.dataset.y
+        y = y if y is not None else self.dataset.Y
 
         y_pred = np.ma.apply_along_axis(self.predict,
                                         axis=0, arr=X.T)

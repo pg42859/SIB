@@ -53,3 +53,15 @@ def r2_score(y_true, y_pred):
     # R^2.
     score = 1 - numerator / denominator
     return score
+
+
+def mse_prime(y_true, y_pred):
+    return 2*(y_pred-y_true)/y_true.size
+
+
+def cross_entropy(y_true, y_pred):
+    return -(y_true * np.log(y_pred)).sum()
+
+
+def cross_entropy_prime(y_true, y_pred):
+    return y_pred - y_true
