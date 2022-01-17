@@ -29,14 +29,11 @@ class LogisticRegression(Model):
             self.theta -= self.lr * gradient
             self.history[epoch] = [self.theta[:], self.cost()]
 
-    def predict(self, X):
-        assert self.is_fited, 'model must be fitted before predicting'
-        _x = np.hstack(([1],X))
-        p = sigmoide(np.dot(self.theta, _x))
-        if p <=0.5:
-            return 0
-        else:
-            return 1
+    def predict(self, x):
+        if not self.is_fited:
+            raise Exception("The model hasn't been fitted yet.")
+        _x = np.hstack(([1], x))
+        return np.round(sigmoide(np.dot(self.theta, _x)))
 
     def cost(self, X=None, Y=None, theta=None):
         if X is not None:
