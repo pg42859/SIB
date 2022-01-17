@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 def accuracy_score(y_true, y_pred):
@@ -65,3 +66,17 @@ def cross_entropy(y_true, y_pred):
 
 def cross_entropy_prime(y_true, y_pred):
     return y_pred - y_true
+
+
+class ConfusionMatrix:
+
+    def __init__(self, true_y, pred_y):
+        self.true_y = np.array(true_y)
+        self.pred_y = np.array(pred_y)
+        self.conf = None
+
+    def calc(self):
+        self.conf = pd.crosstab(self.true_y, self.pred_y, rownames = ['Actual Values'], colnames = ['Predicted Values'], margins = True)
+
+    def toDataframe(self):
+        return pd.DataFrame(self.calc())

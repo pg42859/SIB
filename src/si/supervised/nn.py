@@ -178,8 +178,11 @@ class Poling2D(Model):
         self.size = size
         self.stride = stride
 
-    def pool(self):
-        pass
+    def pool(self, X_col):
+        raise NotImplementedError
+
+    def dpool(self, dX_col, size, stride, padding, max_idx):
+        raise NotImplementedError
 
     def forward(self, input):
         self.X_shape = input.shape
@@ -205,3 +208,47 @@ class Poling2D(Model):
         dX = col2im(dX_col, (n*d, h, w, 1), self.size, pad=0, stride=self.stride)
         dX = dX.reshape(self.X_shape)
         return dX
+
+
+class MaxPoling(Poling2D):
+
+    def __init__(self, region_shape):
+        self.region_h, self.region_w = region_shape
+
+    def pool(X_col):
+        max_idx = np.argmax(X_col, axis=0)
+        out = X_col[max_idx, range(max_idx.size)]
+        return out, max_idx
+
+    def dpool(dX_col, dout_col, pool_cache):
+        dX_col[pool_cache, range(dout_col.size)] = dout_col
+        return dX_col
+
+    def forward(self, input_data):
+        self.X_input = input_data
+        _, self.input_h, self.input_w, self.input_f = input_data.shape
+
+        self.out_h = self.input_h // self.region_h
+        self.out_w = self.input_w // self.region_w
+        output = np.zeros((self.out_h, self.out_w, self.input_f))
+
+        for image, i, j in self.iterate_regions():
+            output[i, j] = np.amax(image)
+        return output
+
+    def backward(self, output_error, lr):
+        n, w, h, d = self.X_shape
+
+        dX_col = np.zeros_like(self.X_shape)
+        dout_col = output_error.transpose(2, 3, 0, 1).ravel()
+
+        dX = self.dpool(dX_col, dout_col, self.max_idx)
+
+        dX = col2im(dX_col, (n * d, 1, h, w), pad = 0, stride = self.stride)
+        dX = dX.reshape(self.X_shape)
+
+    def iterate_regions(self):
+        for i in range(self.out_h):
+            for j in range(self.out_w):
+                image = self.X_input[(i * self.region_h) : (i * self.region_h + 2), (j * self.region_h) : (j * self.region_h + 2)]
+                yield image, i, j
