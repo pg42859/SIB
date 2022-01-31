@@ -4,7 +4,7 @@ import pandas as pd
 from si.util.util import train_test_split
 
 
-class CrossValidationScore:
+class CrossValidationScore:  # divide aleatoriamente os grupros treino e teste e testa os mesmos
 
     def __init__(self, model, dataset, score=None, **kwargs):
         self.model = model
@@ -38,8 +38,9 @@ class CrossValidationScore:
         return train_scores, test_scores
 
     def toDataframe(self):
-        assert self.train_scores and self.test_scores, "Need to run trainning before hand"
-        return np.array((self.train_scores, self.test_scores))
+        import pandas as pd
+        assert self.train_scores and self.test_scores, 'need to run model'
+        return pd.DataFrame({'train Scores': self.train_scores, 'Test Scores': self.test_scores})
 
 
 class GridSearchCV:

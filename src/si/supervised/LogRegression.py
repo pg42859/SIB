@@ -5,7 +5,7 @@ from ..util.util import sigmoide, add_intersect
 
 class LogisticRegression(Model):
     def __init__(self, epochs=1000, lr=0.001):
-        super(LogisticRegression, self).__init__()
+        super().__init__()
         self.theta = None
         self.epochs = epochs
         self.lr = lr
@@ -30,8 +30,7 @@ class LogisticRegression(Model):
             self.history[epoch] = [self.theta[:], self.cost()]
 
     def predict(self, x):
-        if not self.is_fited:
-            raise Exception("The model hasn't been fitted yet.")
+        assert self.is_fited, 'model must be fitted before predicting'
         _x = np.hstack(([1], x))
         return np.round(sigmoide(np.dot(self.theta, _x)))
 
@@ -56,7 +55,7 @@ class LogisticRegression(Model):
 
 
 class LogisticRegressionReg(LogisticRegression):
-    def __init__(self, epochs = 1000, lr=0.1, lbd=1):
+    def __init__(self, epochs=1000, lr=0.1, lbd=1):
         super(LogisticRegressionReg, self).__init__()
         self.lbd = lbd
         self.epochs = epochs

@@ -46,7 +46,7 @@ class LinearRegression(Model):
         return mse(self.Y, y_pred)/2
 
 
-class LinearRegressionReg(LinearRegression):  # para sobreajustamento
+class LinearRegressionReg(LinearRegression):  # para sobreajustamento, penaliza valores altos dos parâmetros na função de custo
     def __init__(self, gd=False, epochs=1000, lbd=1):
         super(LinearRegressionReg, self).__init__()
         self.lbd = lbd  # parametro de regularização
