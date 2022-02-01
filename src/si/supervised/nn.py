@@ -80,17 +80,15 @@ class NN(Model):
         X, Y = dataset.getXy()
         self.dataset = dataset
         self.history = dict()
-        for epoch in range(self.epochs):  # cada apoch corre a rede toda, o forward e backward de todas as camadas
+        for epoch in range(self.epochs):  # cada epoch corre a rede toda, o forward e backward de todas as camadas
             output = X
             # forward propagation
             for layer in self.layers:  # para cada uma das camadas que tenham sido adicionadas
-                # print(layer)
                 output = layer.forward(output)  # corre o forward_pass com o output da camada anterior
 
             # backward propagation
             error = self.loss_prime(Y, output)  # primeiro erro calculado a partir do output da ultima camada
             for layer in reversed(self.layers):  # começa pela ultima camada adicionada
-                # print(layer)
                 error = layer.backward(error, self.lr)  # calcula o erro da camada anterior a partir da camada atual
 
             err = self.loss(Y, output)
@@ -214,7 +212,7 @@ class MaxPooling(Layer):
                 a_prev_slice = input[:, h_start:h_end, w_start:w_end, :]  # slice da matriz inicial
                 self.save_mask(x=a_prev_slice, cords=(i, j))  # guarda a coordenada de onde tirou essa slice
                 output[:, i, j, :] = np.max(a_prev_slice, axis=(1, 2))  # retira o valor máximo da slice
-        return output  # retornando a matriz so com o valor máximo
+        return output  # retorna a matriz so com o valor máximo
 
     def backward(self, output_error, lr):
         output = np.zeros_like(self.X_copy)  # matriz de zeros do tamanho do input
